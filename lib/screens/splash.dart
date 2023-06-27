@@ -1,22 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:queue_client/models/entity.dart';
 import 'package:queue_client/screens/home.dart';
+import 'package:queue_client/screens/login.dart';
+import 'package:queue_client/screens/profile.dart';
+import 'package:queue_client/screens/signup.dart';
+import 'package:redux/redux.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  bool isLoggedIn;
+  SplashScreen({super.key, required this.isLoggedIn});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashScreen> createState() =>
+      _SplashScreenState(isLoggedIn: isLoggedIn);
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool isLoggedIn;
+  _SplashScreenState({required this.isLoggedIn});
+
   @override
   void initState() {
     super.initState();
+    if (isLoggedIn) {
+      navigateToScreen(HomeScreen());
+    } else {
+      navigateToScreen(LoginScreen());
+    }
+  }
+
+  void navigateToScreen(screen) {
     Future.delayed(const Duration(seconds: 2)).then((value) =>
-        Navigator.of(context).pushReplacement(
-            CupertinoPageRoute(builder: (ctx) => const Home())));
+        Navigator.of(context)
+            .pushReplacement(CupertinoPageRoute(builder: (ctx) => screen)));
   }
 
   @override
