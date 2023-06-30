@@ -9,6 +9,11 @@ class UpdateAction {
   UpdateAction({required this.entity});
 }
 
+class RefreshAction {
+  Entity entity;
+  RefreshAction({required this.entity});
+}
+
 // Define reducer
 Entity entityReducer(Entity state, dynamic action) {
   SharedPreferenceService service = SharedPreferenceService();
@@ -16,6 +21,10 @@ Entity entityReducer(Entity state, dynamic action) {
     state = action.entity;
     String taskString = json.encode(state);
     service.updateStringVal(entityDBKey, taskString);
+    return state;
+  }
+  else if (action is RefreshAction) {
+    state = action.entity;
     return state;
   }
   return state;

@@ -1,5 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:queue_client/screens/signup.dart';
+import 'package:http/http.dart' as http;
+import '../constants.dart';
+import '../models/entity.dart';
+import '../redux/entity_reducer.dart';
+import '../utils/util.dart';
+import 'home.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -10,6 +18,27 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  getEntityDetailsVerify(Entity entity, context) async {
+    var response = await http.get(Uri.parse(
+        "$baseUrl${logInEntityByPhoneNumberUrl}password=${entity.password!}&phoneNumber=${entity.phoneNumber!}"));
+
+    if (response.statusCode == 200) {
+      entity.isLoggedIn = true;
+      StoreProvider.of<Entity>(context).dispatch(UpdateAction(entity: entity));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(entity: entity),
+        ),
+        (route) => false,
+      );
+    } else {
+      var jsonResponse = json.decode(response.body);
+      Util.showToast(jsonResponse['message']);
+      print('Failed to fetch messages. Error: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +82,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Perform login logic here
-                      // If validation is successful
+                      Entity entity = Entity.init(
+                          phoneNumber: _phoneNumberController.text,
+                          password: _passwordController.text,
+                          isLoggedIn: true);
+                      getEntityDetailsVerify(entity, context);
                     }
                   },
                   child: const Text(
@@ -89,5 +121,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-

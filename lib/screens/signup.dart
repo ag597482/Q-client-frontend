@@ -1,8 +1,16 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:queue_client/constants.dart';
 import 'package:queue_client/models/entity.dart';
 import 'package:http/http.dart' as http;
+import 'package:queue_client/screens/home.dart';
+
+import '../redux/entity_reducer.dart';
+import '../utils/util.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -17,14 +25,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  void createEntityPostRequest(Entity entity) async {
-    // Replace 'your_api_endpoint' with the actual API endpoint URL
-    var url = Uri.parse("http://ec2-13-127-142-88.ap-south-1.compute.amazonaws.com:9999/addEntity");
+  void createEntityPostRequest(Entity entity, context) async {
+    var url = Uri.parse(
+        // "http://ec2-13-127-142-88.ap-south-1.compute.amazonaws.com:9999/addEntity"
+        baseUrl + createEntity);
 
     // Create the request body
-    var body = {'id': 12, 'name': entity.name, 'phoneNo': entity.phoneNo,
-     'password': entity.password};
-    var jsonBody = json.encode(body);
+    // var body = {
+    //   'id': 12,
+    //   'name': entity.name,
+    //   'phoneNumber': entity.phoneNumber,
+    //   'password': entity.password
+    // };
+    // var jsonBody = json.encode(body);
+    var jsonBody = json.encode(entity.toJson());
+    print(jsonBody);
 
     var headers = {'Content-Type': 'application/json'};
     // Send the POST request
@@ -32,8 +47,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (response.statusCode == 200) {
       print('Request successful!');
+      entity.isLoggedIn = true;
+      StoreProvider.of<Entity>(context).dispatch(UpdateAction(entity: entity));
+      // Navigator.of(context)
+      //     .pushAndRemoveUntil(CupertinoPageRoute(builder: (ctx) => HomeScreen()));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(entity: entity),
+        ),
+        (route) => false,
+      );
       print('Response: ${response.body}');
     } else {
+      var jsonResponse = json.decode(response.body);
+      Util.showToast(jsonResponse['message']);
+      print(response.body);
       print('Request failed with status: ${response.statusCode}');
     }
   }
@@ -111,10 +140,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Entity entity = Entity.init(name: _nameController.text,
-                      phoneNo: _phoneNumberController.text, password: _passwordController.text,
-                      isLoggedIn: true);
-                      createEntityPostRequest(entity);
+                      Entity entity = Entity.init(
+                          name: _nameController.text,
+                          phoneNumber: _phoneNumberController.text,
+                          password: _passwordController.text,
+                          isLoggedIn: true);
+                      createEntityPostRequest(entity, context);
                     }
                   },
                   child: const Text(

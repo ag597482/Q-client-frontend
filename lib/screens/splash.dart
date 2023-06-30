@@ -11,22 +11,24 @@ import 'package:redux/redux.dart';
 
 class SplashScreen extends StatefulWidget {
   bool isLoggedIn;
-  SplashScreen({super.key, required this.isLoggedIn});
+  Entity entity;
+  SplashScreen({super.key, required this.isLoggedIn, required this.entity});
 
   @override
   State<SplashScreen> createState() =>
-      _SplashScreenState(isLoggedIn: isLoggedIn);
+      _SplashScreenState(isLoggedIn: isLoggedIn, entity: entity);
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   bool isLoggedIn;
-  _SplashScreenState({required this.isLoggedIn});
+  Entity entity;
+  _SplashScreenState({required this.isLoggedIn, required this.entity});
 
   @override
   void initState() {
     super.initState();
     if (isLoggedIn) {
-      navigateToScreen(HomeScreen());
+      navigateToScreen(HomeScreen(entity: entity));
     } else {
       navigateToScreen(LoginScreen());
     }

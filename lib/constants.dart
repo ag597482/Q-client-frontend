@@ -1,7 +1,10 @@
 // DB key's
-String entityDBKey = "entityKey";
+String entityDBKey = "entityKey4";
 
 // url endpoints
-String baseUrl = "http://localhost:9999";
-String createEntity = "/addEntity";
+String baseUrl = "https://inqbackend-production.up.railway.app";
+String createEntity = "/addNewEntity";
 String getEntityByID = "/findEntity/{id}";
+String getEntityByPhoneNumberUrl = "/getEntityByPhoneNumber?phoneNumber=";
+String logInEntityByPhoneNumberUrl =
+    "/logInEntityByPhoneNumber?";

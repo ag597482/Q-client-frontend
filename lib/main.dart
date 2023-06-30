@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:queue_client/models/entity.dart';
 import 'package:queue_client/redux/entity_reducer.dart';
-import 'package:queue_client/screens/login.dart';
-import 'package:queue_client/screens/signup.dart';
 import 'package:queue_client/screens/splash.dart';
 import 'package:queue_client/utils/shared_pref_helper.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -30,7 +28,6 @@ class MyApp extends StatelessWidget {
             Entity entity = Entity();
             if (snapshot.data! != "") {
               entity = Entity.fromJson(json.decode(snapshot.data!));
-
             }
 
             return StoreProvider(
@@ -39,7 +36,7 @@ class MyApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 title: 'Q Client',
                 theme: ThemeData(primarySwatch: Colors.blueGrey),
-                home: SplashScreen(isLoggedIn: entity.isLoggedIn ?? false,),
+                home: SplashScreen(isLoggedIn: entity.isLoggedIn ?? false, entity: entity),
               ),
             );
           }

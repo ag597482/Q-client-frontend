@@ -1,22 +1,23 @@
 class Entity {
+  String? id;
   String? name;
-  String? phoneNo;
+  String? phoneNumber;
   String? password;
   bool? isLoggedIn;
 
   Entity();
 
-  Entity.init({this.name, this.phoneNo, this.password, this.isLoggedIn});
+  Entity.init({this.name, this.phoneNumber, this.password, this.isLoggedIn});
 
   Entity.fromJson(Map<String, dynamic> json)
-      : name = json['name'] as String,
-        phoneNo = json['phoneNo'] as String,
-        password = json['password'] as String,
-        isLoggedIn = json['isLoggedIn'] as bool;
+      : name = json['name'] ?? "Na" as String,
+        phoneNumber = json['phoneNumber'] ?? "Ph" as String,
+        password = json['password'] ?? "Pa" as String,
+        isLoggedIn = json['isLoggedIn'] ?? true as bool;
 
   Map<String, dynamic> toJson() => {
         'name': name,
-        'phoneNo': phoneNo,
+        'phoneNumber': phoneNumber,
         'password': password,
         'isLoggedIn': isLoggedIn,
       };
