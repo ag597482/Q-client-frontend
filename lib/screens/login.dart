@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       Entity entity = Entity.init(
-                          phoneNumber: _phoneNumberController.text,
+                          phoneNumber: int.parse(_phoneNumberController.text),
                           password: _passwordController.text,
                           isLoggedIn: true);
                       getEntityDetailsVerify(entity, context);

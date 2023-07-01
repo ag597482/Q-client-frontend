@@ -113,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8.0),
                 Text(
-                  entity.phoneNumber!,
+                  entity.phoneNumber!.toString(),
                   style: TextStyle(fontSize: 16.0),
                 ),
                 SizedBox(height: 8.0),

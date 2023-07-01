@@ -142,7 +142,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (_formKey.currentState!.validate()) {
                       Entity entity = Entity.init(
                           name: _nameController.text,
-                          phoneNumber: _phoneNumberController.text,
+                          phoneNumber: int.parse(_phoneNumberController.text),
                           password: _passwordController.text,
                           isLoggedIn: true);
                       createEntityPostRequest(entity, context);

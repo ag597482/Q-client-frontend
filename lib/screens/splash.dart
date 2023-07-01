@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:queue_client/models/entity.dart';
 import 'package:queue_client/screens/home.dart';
 import 'package:queue_client/screens/login.dart';
-import 'package:queue_client/screens/profile.dart';
-import 'package:queue_client/screens/signup.dart';
-import 'package:redux/redux.dart';
+
 
 class SplashScreen extends StatefulWidget {
   bool isLoggedIn;

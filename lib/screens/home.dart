@@ -1,37 +1,17 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:queue_client/models/login_response.dart';
 import 'package:queue_client/screens/appdrawer.dart';
-import 'package:queue_client/screens/login.dart';
-import 'package:queue_client/screens/profile.dart';
 import 'package:redux/redux.dart';
-import 'package:http/http.dart' as http;
-import '../constants.dart';
 import '../models/entity.dart';
 import '../redux/entity_reducer.dart';
-import '../utils/shared_pref_helper.dart';
+import '../utils/util.dart';
 
 class HomeScreen extends StatelessWidget {
   Entity entity;
   HomeScreen({required this.entity});
 
-  getEntityDetailsVerify(Entity entity) async {
-    // Make the API request to fetch messages
-    // Replace 'your_api_endpoint' with the actual API endpoint URL
-    // password=%s&phoneNumber=%s
-    var response = await http.get(Uri.parse(
-        "$baseUrl${logInEntityByPhoneNumberUrl}password=${entity.password!}&phoneNumber=${entity.phoneNumber!}"));
-
-    if (response.statusCode == 200) {
-      var entity = json.decode(response.body);
-      return entity;
-    } else {
-      print('Failed to fetch messages. Error: ${response.statusCode}');
-      throw exitCode;
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +20,8 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Home'),
       ),
       drawer: getAppDrawer(),
-      body: FutureBuilder<dynamic>(
-        future: getEntityDetailsVerify(entity),
+      body: FutureBuilder<LoginResponse>(
+        future: Util.getEntityDetailsVerify(entity),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
@@ -51,11 +31,11 @@ class HomeScreen extends StatelessWidget {
             return Text('Error: ${snapshot.error}');
           } else {
             Entity entity = Entity();
-            if (snapshot.data! != "") {
-              entity = Entity.fromJson(snapshot.data!['entity']);
-              StoreProvider.of<Entity>(context)
-                  .dispatch(RefreshAction(entity: entity));
-            }
+            // if (snapshot.data! != "") {
+            entity = snapshot.data!.entity;
+            StoreProvider.of<Entity>(context)
+                .dispatch(RefreshAction(entity: entity));
+            // }
             return Container(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.all(20),
@@ -67,7 +47,6 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(entity.toJson().toString()),
                       Text(entity.toJson().toString()),
-                      Text(entity.toJson().toString())
                     ],
                   );
                 }));

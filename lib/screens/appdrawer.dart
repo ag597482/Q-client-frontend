@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:queue_client/screens/profile.dart';
+import 'package:queue_client/screens/qSettings.dart';
 import 'package:redux/redux.dart';
 
 import '../models/entity.dart';
@@ -48,15 +49,17 @@ getProfileOption(context) {
   );
 }
 
-getQSettingOption(context) {
+getQSettingOption(context, Entity entity) {
   return ListTile(
-    leading: const Icon(Icons.person),
-    title: const Text('Profile'),
+    leading: const Icon(Icons.settings),
+    title: const Text('Q Settings'),
     onTap: () {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProfileScreen(),
+          builder: (context) => QSettingScreen(
+            entity: entity,
+          ),
         ),
       );
     },
@@ -94,7 +97,7 @@ getAppDrawer() {
         getDrawerHeader(),
         getProfileOption(context),
         getDivider(),
-        getQSettingOption(context),
+        getQSettingOption(context, entity),
         getDivider(),
         getSignOutOption(context, entity)
       ],
