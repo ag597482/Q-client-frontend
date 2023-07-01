@@ -1,5 +1,5 @@
 // DB key's
-String entityDBKey = "entityKey6";
+String entityDBKey = "entityKey7";
 
 // url endpoints
 String baseUrl = "https://inqbackend-production.up.railway.app";

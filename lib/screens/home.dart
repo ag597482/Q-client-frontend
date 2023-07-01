@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:queue_client/models/login_response.dart';
 import 'package:queue_client/screens/appdrawer.dart';
+import 'package:queue_client/screens/qCard.dart';
 import 'package:redux/redux.dart';
 import '../models/entity.dart';
 import '../redux/entity_reducer.dart';
@@ -10,8 +11,6 @@ import '../utils/util.dart';
 class HomeScreen extends StatelessWidget {
   Entity entity;
   HomeScreen({required this.entity});
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +34,7 @@ class HomeScreen extends StatelessWidget {
             entity = snapshot.data!.entity;
             StoreProvider.of<Entity>(context)
                 .dispatch(RefreshAction(entity: entity));
+
             // }
             return Container(
                 alignment: Alignment.center,
@@ -43,11 +43,22 @@ class HomeScreen extends StatelessWidget {
                     converter: (Store<Entity> store) {
                   return store.state;
                 }, builder: (BuildContext context, Entity entity) {
-                  return Column(
-                    children: [
-                      Text(entity.toJson().toString()),
-                      Text(entity.toJson().toString()),
-                    ],
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        getQCard(),
+                        getQCard(),
+                        getQCard(),
+                        getQCard(),
+                        getQCard(),
+                        getQCard(),
+                        getQCard(),
+                        getQCard(),
+                        getQCard(),
+                        getQCard(),
+                        getQCard()
+                      ],
+                    ),
                   );
                 }));
           }
